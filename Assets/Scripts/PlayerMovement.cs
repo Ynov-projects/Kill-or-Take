@@ -12,12 +12,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float mouseSensitivityY = 3f;
 
-    private CameraFollow follow;
+    private CameraFollow motor;
 
     private void Start()
     {
-        //Camera.main.enabled = false;
-        follow = GetComponent<CameraFollow>();
+        motor = GetComponent<CameraFollow>();
     }
 
     private void Update()
@@ -31,20 +30,20 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 velocity = (moveHorizontal + moveVertical).normalized * speed;
 
-        follow.Move(velocity);
+        motor.Move(velocity);
 
         // On calcule la rotation du joueur en un Vector3
         float yRot = Input.GetAxisRaw("Mouse X");
 
         Vector3 rotation = new Vector3(0, yRot, 0) * mouseSensitivityX;
 
-        follow.Rotate(rotation);
+        motor.Rotate(rotation);
 
         // On calcule la rotation de la camera en un Vector3
         float xRot = Input.GetAxisRaw("Mouse Y");
 
         Vector3 cameraRotation = new Vector3(xRot, 0, 0) * mouseSensitivityY;
 
-        follow.RotateCamera(cameraRotation);
+        motor.RotateCamera(cameraRotation);
     }
 }
