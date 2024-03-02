@@ -26,18 +26,4 @@ public class GameManager : MonoBehaviour
         else
             return null;
     }
-
-    private void OnGUI()
-    {
-        GUILayout.BeginArea(new Rect(200, 200, 200, 500));
-        GUILayout.BeginHorizontal();
-
-        foreach (string player in players.Keys)
-        {
-            GUILayout.Label(player + " " + players[player].transform.name);
-        }
-
-        GUILayout.EndHorizontal();
-        GUILayout.EndArea();
-    }
 }

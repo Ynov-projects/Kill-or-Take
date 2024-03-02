@@ -4,6 +4,7 @@ using Realms.Sync;
 using Realms.Sync.Exceptions;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.VisualScripting;
 
 public class RealmController : MonoBehaviour
 {
@@ -27,16 +28,24 @@ public class RealmController : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        Login("", "");
+    }
+
     void OnDisable()
     {
         if (_realm != null)
         {
+            ResetScore();
             _realm.Dispose();
         }
     }
 
     public async Task<string> Login(string email, string password)
     {
+        email = "romainfatali30@gmail.com";
+        password = "Romain";
         if (email != "" && password != "")
         {
             _realmApp = App.Create(new AppConfiguration(RealmAppId)
@@ -80,31 +89,18 @@ public class RealmController : MonoBehaviour
         return _playerProfile;
     }
 
-    public void IncreaseScore(string name)
+    public void IncreaseScore()
     {
         PlayerScore _playerProfile = GetPlayerProfile();
         if (_playerProfile != null)
         {
             int score = _playerProfile.Score;
-            switch (name)
-            {
-                case "RedSquare":
-                    score--;
-                    break;
-                case "GreenSquare":
-                    score++;
-                    break;
-                case "WhiteSquare":
-                    score=0;
-                    break;
-                default:
-                    break;
-            }
+            score++;
             _realm.Write(() => {
                 _playerProfile.Score = score;
             });
-            UIController.Instance.SetScores(_playerProfile.Score);
         }
+        GetComponent<PlayerSetup>().GetUIController().SetScore(_playerProfile.Score, _playerProfile.HighScore);
     }
 
     public void ResetScore()

@@ -8,40 +8,43 @@ public class Player : NetworkBehaviour
 {
     [SerializeField] private int maxHealth = 100;
 
-    [SyncVar] public int health;
-
-    [SerializeField] private Image _Image;
-    [SerializeField] private RectTransform _Background;
-    [SerializeField] private Gradient _Gradient;
-
+    [SyncVar] private int health;
+    [SyncVar] private int score;
 
     private void Awake()
-    {
-        SetDefault();
-        UpdateLife();
-    }
-
-    private void UpdateLife()
-    {
-        // If less than 0 = 0 / else if > maxlife = maxlife / else life - amount
-        Vector3 CurrentScale = _Background.localScale;
-        CurrentScale.x = (float)health / (float)maxHealth;
-        _Background.localScale = CurrentScale;
-
-        _Image.color = _Gradient.Evaluate(CurrentScale.x);
-
-        //if (life <= 0) GameManager.Instance.Death();
-    }
-
-
-    public void SetDefault()
     {
         health = maxHealth;
     }
 
-    public void TakeDamage(int amount)
+    public float GetHealth()
+    {
+        return (float) health / (float) maxHealth;
+    }
+
+    public int GetScore()
+    {
+        return score;
+    }
+
+    public void IncreaseScore()
+    {
+        score++;
+    }
+
+    public bool TakeDamage(int amount)
     {
         health -= amount;
-        UpdateLife();
+        if (health <= 0)
+            StartCoroutine(Respawn());
+        return (health <= 0);
+    }
+
+    private IEnumerator Respawn()
+    {
+        yield return new WaitForSeconds(MatchSettings.secondsForSpawn);
+        Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
+        transform.position = spawnPoint.position;
+        transform.rotation = spawnPoint.rotation;
+        health = maxHealth;
     }
 }

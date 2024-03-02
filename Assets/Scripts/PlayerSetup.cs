@@ -1,5 +1,6 @@
 using UnityEngine;
 using Mirror;
+using Mirror.Examples.Basic;
 
 public class PlayerSetup : NetworkBehaviour
 {
@@ -9,7 +10,11 @@ public class PlayerSetup : NetworkBehaviour
     [SerializeField] private string remoteLayerName = "RemotePlayer";
 
     Camera sceneCamera;
-    [SerializeField] GameObject life;
+
+    [SerializeField]
+    private GameObject UIPrefab;
+
+    private GameObject UIPrefabInstance;
 
     private void Start()
     {
@@ -24,10 +29,21 @@ public class PlayerSetup : NetworkBehaviour
             if (sceneCamera != null)
             {
                 sceneCamera.gameObject.SetActive(false);
-                life.SetActive(true);
                 //sceneCamera.gameObject.GetComponent<AudioListener>().enabled = false;
             }
+            UIPrefabInstance = Instantiate(UIPrefab);
+            UIController ui = UIPrefabInstance.GetComponent<UIController>();
+            
+            if (ui == null)
+                Debug.LogError("Pas d'UI sur playerUIInstance");
+            else
+                ui.SetPlayer(GetComponent<Player>());
         }
+    }
+
+    public UIController GetUIController()
+    {
+        return UIPrefabInstance.GetComponent<UIController>();
     }
 
     public override void OnStartClient()
@@ -52,9 +68,9 @@ public class PlayerSetup : NetworkBehaviour
 
     private void OnDisable()
     {
+        Destroy(UIPrefabInstance);
         if (sceneCamera != null)
             sceneCamera.gameObject.SetActive(true);
-        life.SetActive(false);
 
         GameManager.UnregisterPlayer(transform.name);
     }

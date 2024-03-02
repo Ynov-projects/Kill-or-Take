@@ -6,7 +6,12 @@ public class PlayerShoot : NetworkBehaviour
     [SerializeField]
     private LayerMask mask;
 
-    private string error = "";
+    private Transform player;
+
+    private void Start()
+    {
+        player = transform.parent.parent.parent;
+    }
 
     private void Update()
     {
@@ -15,7 +20,7 @@ public class PlayerShoot : NetworkBehaviour
             Shoot();
         }
     }
-    
+
     [Client]
     private void Shoot()
     {
@@ -34,31 +39,11 @@ public class PlayerShoot : NetworkBehaviour
     [Command]
     private void CmdPlayerShot(string playerId, int damage)
     {
-        Debug.Log(playerId + " a été touché.");
-
-        try
+        Player enemy = GameManager.GetPlayer(playerId);
+        if (enemy.TakeDamage(damage))
         {
-            Player player = GameManager.GetPlayer(playerId);
-            player.TakeDamage(damage);
+            player.GetComponent<RealmController>().IncreaseScore();
+            player.GetComponent<Player>().IncreaseScore();
         }
-        catch(System.Exception e)
-        {
-            error = e.Message;
-        }
-    }
-
-    [System.Obsolete]
-    private void OnGUI()
-    {
-        GUILayout.BeginArea(new Rect(400, 400, 200, 500));
-        GUILayout.BeginHorizontal();
-
-        foreach (AudioListener audio in GameObject.FindObjectsOfType<AudioListener>())
-        {
-            GUILayout.Label(audio.name);
-        }
-
-        GUILayout.EndHorizontal();
-        GUILayout.EndArea();
     }
 }
