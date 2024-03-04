@@ -3,7 +3,9 @@ using Realms.Sync;
 using Realms;
 using System.Threading.Tasks;
 using UnityEngine;
-using Mirror;
+using System.Linq;
+using UnityEngine.SocialPlatforms.Impl;
+using System.Collections.Generic;
 
 public class RealmManager : MonoBehaviour
 {
@@ -33,6 +35,17 @@ public class RealmManager : MonoBehaviour
     private void Start()
     {
         Spawn();
+    }
+
+    public IQueryable<PlayerScore> SetScores()
+    {
+        string[] players = new string[100];
+        IQueryable<PlayerScore> _playerProfiles = _realm.All<PlayerScore>().OrderByDescending(p => p.HighScore);
+        foreach (PlayerScore playerProfile in _playerProfiles)
+        {
+            players.Append(playerProfile.UserId);
+        }
+        return _playerProfiles;
     }
 
     private async void Spawn()

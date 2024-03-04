@@ -40,6 +40,14 @@ public class PlayerSetup : NetworkBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            UIPrefabInstance.GetComponent<UIController>().SetScores();
+        }
+    }
+
     public UIController GetUIController()
     {
         return UIPrefabInstance.GetComponent<UIController>();
@@ -49,7 +57,7 @@ public class PlayerSetup : NetworkBehaviour
     {
         base.OnStartClient();
         GameManager.RegisterPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<Player>());
-        
+
         GameManager.RegisterLogged(GetComponent<NetworkIdentity>().netId.ToString(), LogManager.Instance.realmUserId);
         Destroy(LogManager.Instance.gameObject);
     }
