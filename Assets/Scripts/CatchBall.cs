@@ -6,7 +6,6 @@ public class CatchBall : MonoBehaviour
     {
         if (collision.gameObject.tag == "RemotePlayer")
         {
-            Debug.Log("coucou");
         }
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         transform.localPosition = Vector3.zero;

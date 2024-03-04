@@ -1,24 +1,21 @@
 using Mirror;
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Player : NetworkBehaviour
 {
     [SerializeField] private int maxHealth = 100;
 
-    [SyncVar] private int health;
+    [SyncVar] public int health;
     [SyncVar] private int score;
 
-    private void Awake()
+    private void Start()
     {
         health = maxHealth;
     }
 
     public float GetHealth()
     {
-        return (float) health / (float) maxHealth;
+        return (float)health / (float)maxHealth;
     }
 
     public int GetScore()
@@ -31,17 +28,21 @@ public class Player : NetworkBehaviour
         score++;
     }
 
-    public bool TakeDamage(int amount)
+    private void OnDisable()
+    {
+        RealmManager.Instance.SetHighScore(transform.name);
+    }
+
+    [ClientRpc]
+    public void RpcTakeDamage(int amount)
     {
         health -= amount;
         if (health <= 0)
-            StartCoroutine(Respawn());
-        return (health <= 0);
+            Respawn();
     }
 
-    private IEnumerator Respawn()
+    private void Respawn()
     {
-        yield return new WaitForSeconds(MatchSettings.secondsForSpawn);
         Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;

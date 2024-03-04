@@ -29,11 +29,10 @@ public class PlayerSetup : NetworkBehaviour
             if (sceneCamera != null)
             {
                 sceneCamera.gameObject.SetActive(false);
-                //sceneCamera.gameObject.GetComponent<AudioListener>().enabled = false;
             }
             UIPrefabInstance = Instantiate(UIPrefab);
             UIController ui = UIPrefabInstance.GetComponent<UIController>();
-            
+            Debug.Log(ui == null);
             if (ui == null)
                 Debug.LogError("Pas d'UI sur playerUIInstance");
             else
@@ -49,8 +48,10 @@ public class PlayerSetup : NetworkBehaviour
     public override void OnStartClient()
     {
         base.OnStartClient();
-
         GameManager.RegisterPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<Player>());
+        
+        GameManager.RegisterLogged(GetComponent<NetworkIdentity>().netId.ToString(), LogManager.Instance.realmUserId);
+        Destroy(LogManager.Instance.gameObject);
     }
 
     private void DisableComponents()
@@ -73,5 +74,6 @@ public class PlayerSetup : NetworkBehaviour
             sceneCamera.gameObject.SetActive(true);
 
         GameManager.UnregisterPlayer(transform.name);
+        GameManager.UnregisterLogged(transform.name);
     }
 }

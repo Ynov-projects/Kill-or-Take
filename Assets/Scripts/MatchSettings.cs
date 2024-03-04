@@ -1,4 +1,4 @@
 public static class MatchSettings
 {
-    public static int secondsForSpawn = 2;
+    public static int secondsForSpawn = 0;
 }

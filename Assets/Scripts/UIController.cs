@@ -4,18 +4,16 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI score;
-
     [SerializeField] private Image _Image;
     [SerializeField] private RectTransform _Background;
     [SerializeField] private Gradient _Gradient;
 
-    private Player player;
+    public Player player;
 
-    public void SetScore(int ext_score, int ext_highscore)
-    {
-        score.text = "Score: " + ext_score + "\n HighScore: " + ext_highscore;
-    }
+    //public void SetScore(int ext_score)
+    //{
+    //    score.text = "Score: " + ext_score/* + "\n HighScore: " + ext_highscore*/;
+    //}
 
     public void SetPlayer(Player _player)
     {
@@ -25,6 +23,7 @@ public class UIController : MonoBehaviour
     private void Update()
     {
         UpdateLife(player.GetHealth());
+        //SetScore(player.GetScore());
     }
 
     public void UpdateLife(float amount)

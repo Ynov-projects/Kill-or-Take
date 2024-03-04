@@ -6,13 +6,6 @@ public class PlayerShoot : NetworkBehaviour
     [SerializeField]
     private LayerMask mask;
 
-    private Transform player;
-
-    private void Start()
-    {
-        player = transform.parent.parent.parent;
-    }
-
     private void Update()
     {
         if (Input.GetButtonDown("Fire1"))
@@ -40,10 +33,12 @@ public class PlayerShoot : NetworkBehaviour
     private void CmdPlayerShot(string playerId, int damage)
     {
         Player enemy = GameManager.GetPlayer(playerId);
-        if (enemy.TakeDamage(damage))
+        enemy.RpcTakeDamage(damage);
+        if (enemy.GetHealth() <= 0)
         {
-            player.GetComponent<RealmController>().IncreaseScore();
-            player.GetComponent<Player>().IncreaseScore();
+            Player _player = transform.parent.parent.parent.GetComponent<Player>();
+            RealmManager.Instance.IncreaseScore(transform.name);
+            _player.IncreaseScore();
         }
     }
 }
