@@ -10,8 +10,20 @@ public class PlayerCatchBall : NetworkBehaviour
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            ball.SetActive(true);
-            ball.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
+            SendBall();
         }
+    }
+
+    [Command]
+    private void SendBall()
+    {
+        RpcBall();
+    }
+
+    [ClientRpc]
+    private void RpcBall()
+    {
+        ball.SetActive(true);
+        ball.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
     }
 }

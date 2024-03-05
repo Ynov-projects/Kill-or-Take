@@ -25,8 +25,11 @@ public class PlayerShoot : NetworkBehaviour
         RaycastHit hit;
 
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, 100f, mask))
+        {
+            Debug.Log(hit.collider.transform.name);
             if (hit.collider.tag == "Player")
                 CmdPlayerShot(hit.collider.name, 10);
+        }
     }
 
     [Command]

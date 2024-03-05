@@ -9,9 +9,12 @@ public class Player : NetworkBehaviour
 
     [SyncVar] public string realmUserId;
 
+    private NetworkManager networkManager;
+
     private void Start()
     {
         health = maxHealth;
+        networkManager = NetworkManager.singleton;
     }
 
     public float GetHealth()
@@ -44,5 +47,30 @@ public class Player : NetworkBehaviour
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
         health = maxHealth;
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.tag == "CatchBall" && gameObject.layer == LayerMask.NameToLayer("LocalPlayer"))
+        {
+            try
+            {
+                Disconnect();
+            }
+            catch (System.Exception e)
+            { }
+        }
+    }
+
+    public void Disconnect()
+    {
+        if (isClientOnly)
+        {
+            networkManager.StopClient();
+        }
+        else
+        {
+            networkManager.StopHost();
+        }
     }
 }
