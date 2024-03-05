@@ -32,19 +32,8 @@ public class PlayerSetup : NetworkBehaviour
             }
             UIPrefabInstance = Instantiate(UIPrefab);
             UIController ui = UIPrefabInstance.GetComponent<UIController>();
-            Debug.Log(ui == null);
-            if (ui == null)
-                Debug.LogError("Pas d'UI sur playerUIInstance");
-            else
+            if (ui != null)
                 ui.SetPlayer(GetComponent<Player>());
-        }
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            UIPrefabInstance.GetComponent<UIController>().SetScores();
         }
     }
 
@@ -57,9 +46,11 @@ public class PlayerSetup : NetworkBehaviour
     {
         base.OnStartClient();
         GameManager.RegisterPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<Player>());
+    }
 
-        GameManager.RegisterLogged(GetComponent<NetworkIdentity>().netId.ToString(), LogManager.Instance.realmUserId);
-        Destroy(LogManager.Instance.gameObject);
+    public void DisplayScorePanel()
+    {
+        UIPrefabInstance.GetComponent<UIController>().SetScores();
     }
 
     private void DisableComponents()

@@ -45,13 +45,20 @@ public class UIController : MonoBehaviour
     public void SetScores()
     {
         pnlScores.SetActive(!pnlScores.activeSelf);
-        IQueryable<PlayerScore> players = RealmManager.Instance.SetScores();
-
-        for (int i = 0; i < 5; i++)
+        if (pnlScores.activeSelf)
         {
-            if (players.ElementAt(i) != null)
+            IQueryable<PlayerScore> players = RealmManager.Instance.SetScores();
+
+            for (int i = 0; i < 5; i++)
             {
-                texts[i].text = "Player : " + players.ElementAt(i).UserId + " a pour score " + players.ElementAt(i).Score + " et top score " + players.ElementAt(i).HighScore;
+                if (players.Count() > i)
+                {
+                    PlayerScore _player = players.ElementAt(i);
+                    if(_player != null)
+                        if(_player.UserId != null)
+                            if(_player.UserId != "")
+                                texts[i].text = "Player : " + _player.UserId + " a pour score " + _player.Score + " et top score " + _player.HighScore;
+                }
             }
         }
     }

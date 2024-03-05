@@ -1,55 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2472745534191112180
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4240070688444225617}
-  - component: {fileID: 8583898532723002814}
-  m_Layer: 3
-  m_Name: spawnLaser
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4240070688444225617
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2472745534191112180}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.341, y: -0.2023, z: 1.2034}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8771274656396726163}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8583898532723002814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2472745534191112180}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf3b943b3882b74478013d83dfcd067c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  mask:
-    serializedVersion: 2
-    m_Bits: 119
 --- !u!1 &3424472076566502463
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,6 +506,7 @@ GameObject:
   - component: {fileID: 6841898483373467416}
   - component: {fileID: 4632075108921564442}
   - component: {fileID: 8029036086448677682}
+  - component: {fileID: 2714333128889734358}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -683,7 +634,7 @@ MonoBehaviour:
   - {fileID: 4632075108921564442}
   - {fileID: 8771274655489620732}
   - {fileID: 8771274655489620733}
-  - {fileID: 8583898532723002814}
+  - {fileID: 2714333128889734358}
   remoteLayerName: RemotePlayer
   UIPrefab: {fileID: 1405614993304472836, guid: 2f3f54db323216148b54628967c7492e,
     type: 3}
@@ -851,6 +802,25 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &2714333128889734358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8771274655562078159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf3b943b3882b74478013d83dfcd067c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  mask:
+    serializedVersion: 2
+    m_Bits: 119
+  cam: {fileID: 8771274655489620732}
 --- !u!1 &8771274655974948988
 GameObject:
   m_ObjectHideFlags: 0
@@ -1000,7 +970,6 @@ Transform:
   - {fileID: 8771274655434203113}
   - {fileID: 8771274656343302675}
   - {fileID: 8771274654697820323}
-  - {fileID: 4240070688444225617}
   - {fileID: 2455017625983853735}
   m_Father: {fileID: 8771274655489620706}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

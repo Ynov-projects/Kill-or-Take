@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     private const string playerIdPrefix = "Player";
 
     private static Dictionary<string, Player> players = new Dictionary<string, Player>();
-    private static Dictionary<string, string> logged = new Dictionary<string, string>();
+    public static Dictionary<string, string> logged = new Dictionary<string, string>();
 
     public static GameManager Instance;
 
@@ -21,28 +21,31 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static void RegisterLogged(string netId, string logId)
-    {
-        string playerId = playerIdPrefix + netId;
-        logged.Add(playerId, logId);
-    }
-
     public static void RegisterPlayer(string netId, Player player)
     {
         string playerId = playerIdPrefix + netId;
-        players.Add(playerId, player);
+        if(!players.ContainsKey(playerId))
+            players.Add(playerId, player);
+    
         player.transform.name = playerId;
+        
+        if (player.realmUserId == "" && !LogManager.Instance.alreadyChecked)
+        {
+            player.realmUserId = LogManager.Instance.realmUserId;
+            LogManager.Instance.alreadyChecked = true;
+        }
+        if(!logged.ContainsKey(playerId))
+            logged.Add(playerId, player.realmUserId);
     }
 
     public static void UnregisterPlayer(string netId)
     {
         players.Remove(netId);
     }
-    
 
     public static void UnregisterLogged(string netId)
     {
-        players.Remove(netId);
+        logged.Remove(netId);
     }
 
     public static Player GetPlayer(string playerId)

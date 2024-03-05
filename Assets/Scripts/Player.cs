@@ -6,7 +6,8 @@ public class Player : NetworkBehaviour
     [SerializeField] private int maxHealth = 100;
 
     [SyncVar] public int health;
-    [SyncVar] private int score;
+
+    [SyncVar] public string realmUserId;
 
     private void Start()
     {
@@ -18,30 +19,26 @@ public class Player : NetworkBehaviour
         return (float)health / (float)maxHealth;
     }
 
-    public int GetScore()
-    {
-        return score;
-    }
-
-    public void IncreaseScore()
-    {
-        score++;
-    }
-
     private void OnDisable()
     {
-        RealmManager.Instance.SetHighScore(transform.name);
+        if(isLocalPlayer)
+            RealmManager.Instance.SetHighScore(GameManager.GetLogged(transform.name));
+        LogManager.Instance.alreadyChecked = false;
     }
 
     [ClientRpc]
-    public void RpcTakeDamage(int amount)
+    public void RpcTakeDamage(int amount, Transform _player)
     {
         health -= amount;
         if (health <= 0)
+        {
             Respawn();
+            string loggedId = GameManager.GetLogged(_player.name);
+            RealmManager.Instance.IncreaseScore(loggedId);
+        }
     }
 
-    private void Respawn()
+    public void Respawn()
     {
         Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = spawnPoint.position;

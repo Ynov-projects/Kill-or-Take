@@ -40,7 +40,7 @@ public class RealmManager : MonoBehaviour
     public IQueryable<PlayerScore> SetScores()
     {
         string[] players = new string[100];
-        IQueryable<PlayerScore> _playerProfiles = _realm.All<PlayerScore>().OrderByDescending(p => p.HighScore);
+        IQueryable<PlayerScore> _playerProfiles = _realm.All<PlayerScore>().OrderByDescending(p => p.HighScore).OrderByDescending(p => p.Score);
         foreach (PlayerScore playerProfile in _playerProfiles)
         {
             players.Append(playerProfile.UserId);
@@ -83,7 +83,7 @@ public class RealmManager : MonoBehaviour
     public PlayerScore GetPlayerProfile(string playerId)
     {
         PlayerScore _playerProfile = _realm.Find<PlayerScore>(playerId);
-        if (_playerProfile == null)
+        if (_playerProfile == null && playerId.Trim() != "")
         {
             _realm.Write(() =>
             {
@@ -91,19 +91,6 @@ public class RealmManager : MonoBehaviour
             });
         }
         return _playerProfile;
-    }
-
-    public void ResetScore(string playerId)
-    {
-        PlayerScore _playerProfile = GetPlayerProfile(playerId);
-        if (_playerProfile != null)
-        {
-            _realm.Write(() =>
-            {
-                _playerProfile.Score = 0;
-            });
-            //GetComponent<PlayerSetup>().GetUIController().SetScore(0/*, _playerProfile.HighScore*/);
-        }
     }
 
     public void IncreaseScore(string playerId)
@@ -117,7 +104,6 @@ public class RealmManager : MonoBehaviour
             {
                 _playerProfile.Score = score;
             });
-            //GetComponent<PlayerSetup>().GetUIController().SetScore(score/*, _playerProfile.HighScore*/);
         }
     }
 
